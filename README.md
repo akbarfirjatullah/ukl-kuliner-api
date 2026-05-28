@@ -70,8 +70,9 @@ Contoh `.env` untuk XAMPP MySQL tanpa password:
 ```env
 PORT=3000
 DATABASE_URL="mysql://root:@localhost:3306/ukl_recipe_app"
-JWT_SECRET="super-secret-jwt-key-change-this"
+JWT_SECRET="change-me-to-a-strong-random-secret-at-least-32-characters"
 JWT_EXPIRES_IN="1d"
+ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
 ADMIN_NAME="Admin UKL"
 ADMIN_EMAIL="admin@uklrecipe.com"
 ADMIN_PASSWORD="Admin12345"
@@ -205,6 +206,17 @@ Docker bersifat opsional untuk development lokal.
 
 Kalau menggunakan XAMPP, Anda tidak wajib memakai Docker. Docker disediakan agar MySQL bisa dijalankan secara terpisah dan konsisten untuk project ini.
 
+Kalau menjalankan MySQL dengan Docker Compose, siapkan variabel berikut di `.env` sebelum menjalankan perintah di bawah:
+
+```env
+MYSQL_ROOT_PASSWORD="ganti-password-root-docker"
+MYSQL_DATABASE="ukl_recipe_app"
+MYSQL_USER="nestuser"
+MYSQL_PASSWORD="ganti-password-database-docker"
+```
+
+`DATABASE_URL` di aplikasi harus sesuai dengan `MYSQL_USER` dan `MYSQL_PASSWORD` di atas jika Anda memakai Docker.
+
 Menjalankan MySQL dengan Docker:
 
 ```bash
@@ -226,8 +238,9 @@ Environment variable yang perlu disiapkan di server:
 ```env
 PORT=3000
 DATABASE_URL="mysql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME"
-JWT_SECRET="ganti-dengan-secret-production"
+JWT_SECRET="ganti-dengan-secret-production-yang-kuat-minimal-32-karakter"
 JWT_EXPIRES_IN="1d"
+ALLOWED_ORIGINS="https://frontend-anda.com"
 ADMIN_NAME="Admin UKL"
 ADMIN_EMAIL="admin@uklrecipe.com"
 ADMIN_PASSWORD="Admin12345"

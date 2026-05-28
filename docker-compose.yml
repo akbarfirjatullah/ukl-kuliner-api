@@ -4,16 +4,16 @@ services:
     container_name: ukl-recipe-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: ukl_recipe_app
-      MYSQL_USER: nestuser
-      MYSQL_PASSWORD: nestpass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in your .env file}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in your .env file}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in your .env file}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in your .env file}
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$MYSQL_ROOT_PASSWORD\""]
       interval: 10s
       timeout: 5s
       retries: 10

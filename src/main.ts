@@ -5,11 +5,28 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter';
 
+function parseAllowedOrigins(configService: ConfigService) {
+  const configuredOrigins = configService.get<string>('ALLOWED_ORIGINS');
+  const fallbackOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+
+  const origins =
+    configuredOrigins
+      ?.split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean) ?? [];
+
+  return origins.length > 0 ? origins : fallbackOrigins;
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  app.enableCors();
+  app.enableCors({
+    origin: parseAllowedOrigins(configService),
+    credentials: true
+  });
+  app.enableShutdownHooks();
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({

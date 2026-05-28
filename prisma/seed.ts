@@ -27,7 +27,7 @@ async function main() {
 
   console.log('Seed berhasil dijalankan.');
   console.log(`Email admin: ${adminEmail}`);
-  console.log(`Password admin: ${adminPassword}`);
+  console.log('Password admin disembunyikan demi keamanan.');
 }
 
 main()

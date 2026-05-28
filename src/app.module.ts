@@ -11,10 +11,30 @@ import { RecipesModule } from './recipes/recipes.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
 
+const REQUIRED_ENV_KEYS = ['DATABASE_URL', 'JWT_SECRET', 'PORT'] as const;
+
+function validateEnv(config: Record<string, unknown>) {
+  for (const key of REQUIRED_ENV_KEYS) {
+    const value = config[key];
+
+    if (typeof value !== 'string' || value.trim() === '') {
+      throw new Error(`${key} is required.`);
+    }
+  }
+
+  const port = config.PORT;
+  if (typeof port !== 'string' || Number.isNaN(Number(port))) {
+    throw new Error('PORT must be a valid number.');
+  }
+
+  return config;
+}
+
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
+      validate: validateEnv
     }),
     PrismaModule,
     AuthModule,
