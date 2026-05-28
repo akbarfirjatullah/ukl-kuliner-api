@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipes   Recipe[] @relation("RecipeCreator")
+  favorites Favorite[]
+  reviews   Review[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recipes     Recipe[]
+}
+
+model Recipe {
+  id              Int       @id @default(autoincrement())
+  title           String
+  slug            String    @unique
+  description     String    @db.Text
+  ingredients     String    @db.LongText
+  instructions    String    @db.LongText
+  imageUrl        String?
+  prepTimeMinutes Int?
+  cookTimeMinutes Int?
+  servings        Int?
+  averageRating   Float     @default(0)
+  ratingCount     Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  categoryId      Int
+  createdById     Int
+
+  category        Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdBy       User      @relation("RecipeCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  favorites       Favorite[]
+  reviews         Review[]
+
+  @@index([categoryId])
+  @@index([createdById])
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  recipeId  Int
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+  @@index([recipeId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?  @db.Text
+  userId    Int
+  recipeId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+  @@index([recipeId])
+}
