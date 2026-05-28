@@ -4,3 +4,5 @@ dist
 .DS_Store
 coverage
 prisma/dev.db
+frontend/.env
+frontend/.env.local

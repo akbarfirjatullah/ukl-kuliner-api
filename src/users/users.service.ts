@@ -32,7 +32,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found.');
+      throw new NotFoundException('Pengguna tidak ditemukan.');
     }
 
     return user;

@@ -15,7 +15,7 @@ export class CreateReviewDto {
   @Max(5)
   rating: number;
 
-  @ApiPropertyOptional({ example: 'Very tasty and easy to follow.' })
+  @ApiPropertyOptional({ example: 'Rasanya enak dan langkahnya mudah diikuti.' })
   @IsOptional()
   @IsString()
   @MaxLength(1000)

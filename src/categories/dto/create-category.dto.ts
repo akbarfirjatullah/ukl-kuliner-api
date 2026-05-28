@@ -2,13 +2,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateCategoryDto {
-  @ApiProperty({ example: 'Dessert' })
+  @ApiProperty({ example: 'Makanan Utama' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   name: string;
 
-  @ApiPropertyOptional({ example: 'Sweet food and dessert recipes' })
+  @ApiPropertyOptional({ example: 'Kumpulan resep makanan utama untuk sehari-hari' })
   @IsOptional()
   @IsString()
   @MaxLength(500)

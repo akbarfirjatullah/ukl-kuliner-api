@@ -24,9 +24,9 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter());
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('UKL Recipe API')
+    .setTitle('API Resep Kuliner UKL')
     .setDescription(
-      'Backend API for a culinary / recipe application built with NestJS, Prisma, and MySQL.'
+      'Backend API untuk aplikasi kuliner / resep yang dibuat dengan NestJS, Prisma, dan MySQL.'
     )
     .setVersion('1.0.0')
     .addBearerAuth()
@@ -41,8 +41,8 @@ async function bootstrap() {
 
   const port = Number(configService.get<string>('PORT') ?? 3000);
   await app.listen(port);
-  console.log(`Server is running on http://localhost:${port}/api`);
-  console.log(`Swagger docs available at http://localhost:${port}/api/docs`);
+  console.log(`Server berjalan di http://localhost:${port}/api`);
+  console.log(`Dokumentasi Swagger tersedia di http://localhost:${port}/api/docs`);
 }
 
 bootstrap();

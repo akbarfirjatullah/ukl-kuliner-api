@@ -24,36 +24,36 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ReviewsService } from './reviews.service';
 
-@ApiTags('Reviews')
+@ApiTags('Ulasan')
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Get('me')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get the logged-in user reviews' })
-  @ApiOkResponse({ description: 'User reviews returned successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Mengambil ulasan pengguna yang sedang login' })
+  @ApiOkResponse({ description: 'Daftar ulasan pengguna berhasil diambil.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   findMyReviews(@CurrentUser('userId') userId: number) {
     return this.reviewsService.findMyReviews(userId);
   }
 
   @Public()
   @Get('recipe/:recipeId')
-  @ApiOperation({ summary: 'Get all reviews for a recipe' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Recipe reviews returned successfully.' })
+  @ApiOperation({ summary: 'Mengambil semua ulasan untuk sebuah resep' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Daftar ulasan resep berhasil diambil.' })
   findByRecipe(@Param('recipeId', ParseIntPipe) recipeId: number) {
     return this.reviewsService.findByRecipe(recipeId);
   }
 
   @Post('recipe/:recipeId')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a review for a recipe' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiCreatedResponse({ description: 'Review created successfully.' })
-  @ApiConflictResponse({ description: 'User has already reviewed this recipe.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Membuat ulasan untuk sebuah resep' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiCreatedResponse({ description: 'Ulasan berhasil dibuat.' })
+  @ApiConflictResponse({ description: 'Pengguna sudah memberikan ulasan untuk resep ini.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   create(
     @CurrentUser('userId') userId: number,
     @Param('recipeId', ParseIntPipe) recipeId: number,
@@ -64,10 +64,10 @@ export class ReviewsController {
 
   @Patch('recipe/:recipeId')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update the logged-in user review for a recipe' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Review updated successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Mengubah ulasan pengguna yang sedang login untuk sebuah resep' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Ulasan berhasil diubah.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   update(
     @CurrentUser('userId') userId: number,
     @Param('recipeId', ParseIntPipe) recipeId: number,
@@ -78,10 +78,10 @@ export class ReviewsController {
 
   @Delete('recipe/:recipeId')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete the logged-in user review for a recipe' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Review deleted successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Menghapus ulasan pengguna yang sedang login untuk sebuah resep' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Ulasan berhasil dihapus.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   remove(
     @CurrentUser('userId') userId: number,
     @Param('recipeId', ParseIntPipe) recipeId: number

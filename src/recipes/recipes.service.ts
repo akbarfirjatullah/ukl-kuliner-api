@@ -72,7 +72,7 @@ export class RecipesService {
     });
 
     if (!recipe) {
-      throw new NotFoundException('Recipe not found.');
+      throw new NotFoundException('Resep tidak ditemukan.');
     }
 
     return recipe;
@@ -123,7 +123,7 @@ export class RecipesService {
     });
 
     return {
-      message: 'Recipe deleted successfully.'
+      message: 'Resep berhasil dihapus.'
     };
   }
 
@@ -134,7 +134,7 @@ export class RecipesService {
     });
 
     if (!category) {
-      throw new NotFoundException('Category not found.');
+      throw new NotFoundException('Kategori tidak ditemukan.');
     }
   }
 

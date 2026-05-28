@@ -2,7 +2,7 @@
   "name": "ukl-recipe-api",
   "version": "1.0.0",
   "private": true,
-  "description": "Backend API for a UKL culinary / recipe app using NestJS, Prisma, and MySQL.",
+  "description": "Backend API untuk aplikasi kuliner / resep UKL menggunakan NestJS, Prisma, dan MySQL.",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",

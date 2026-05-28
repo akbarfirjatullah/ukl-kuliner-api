@@ -38,13 +38,13 @@ export class PrismaClientExceptionFilter implements ExceptionFilter {
   private mapMessage(code: string): string {
     switch (code) {
       case 'P2002':
-        return 'A record with this unique value already exists.';
+        return 'Data dengan nilai unik tersebut sudah ada.';
       case 'P2003':
-        return 'The related record does not exist or cannot be used.';
+        return 'Data relasi tidak ditemukan atau tidak dapat digunakan.';
       case 'P2025':
-        return 'The requested record could not be found.';
+        return 'Data yang diminta tidak ditemukan.';
       default:
-        return 'An unexpected database error occurred.';
+        return 'Terjadi kesalahan pada database.';
     }
   }
 }

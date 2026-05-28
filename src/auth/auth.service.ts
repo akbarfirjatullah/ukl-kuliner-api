@@ -24,7 +24,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new ConflictException('Email is already registered.');
+      throw new ConflictException('Email sudah terdaftar.');
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -37,7 +37,7 @@ export class AuthService {
       }
     });
 
-    return this.buildAuthResponse(user, 'User registered successfully.');
+    return this.buildAuthResponse(user, 'Pengguna berhasil didaftarkan.');
   }
 
   async login(loginDto: LoginDto) {
@@ -46,16 +46,16 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password.');
+      throw new UnauthorizedException('Email atau password salah.');
     }
 
     const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid email or password.');
+      throw new UnauthorizedException('Email atau password salah.');
     }
 
-    return this.buildAuthResponse(user, 'Login successful.');
+    return this.buildAuthResponse(user, 'Login berhasil.');
   }
 
   private async buildAuthResponse(user: User, message: string) {

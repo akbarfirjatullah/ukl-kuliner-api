@@ -74,7 +74,7 @@ export class ReviewsService {
       });
 
       if (!recipe) {
-        throw new NotFoundException('Recipe not found.');
+        throw new NotFoundException('Resep tidak ditemukan.');
       }
 
       const existingReview = await tx.review.findUnique({
@@ -87,7 +87,7 @@ export class ReviewsService {
       });
 
       if (existingReview) {
-        throw new ConflictException('You have already reviewed this recipe.');
+        throw new ConflictException('Anda sudah memberikan ulasan untuk resep ini.');
       }
 
       const review = await tx.review.create({
@@ -118,7 +118,7 @@ export class ReviewsService {
       });
 
       if (!existingReview) {
-        throw new NotFoundException('Review not found for this recipe.');
+        throw new NotFoundException('Ulasan untuk resep ini tidak ditemukan.');
       }
 
       const updatedReview = await tx.review.update({
@@ -153,7 +153,7 @@ export class ReviewsService {
       });
 
       if (!existingReview) {
-        throw new NotFoundException('Review not found for this recipe.');
+        throw new NotFoundException('Ulasan untuk resep ini tidak ditemukan.');
       }
 
       await tx.review.delete({
@@ -168,7 +168,7 @@ export class ReviewsService {
       await this.updateRecipeRatingSummary(tx, recipeId);
 
       return {
-        message: 'Review deleted successfully.'
+        message: 'Ulasan berhasil dihapus.'
       };
     });
   }
@@ -180,7 +180,7 @@ export class ReviewsService {
     });
 
     if (!recipe) {
-      throw new NotFoundException('Recipe not found.');
+      throw new NotFoundException('Resep tidak ditemukan.');
     }
   }
 

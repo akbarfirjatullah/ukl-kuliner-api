@@ -28,11 +28,11 @@ export class RolesGuard implements CanActivate {
     const user = request.user as AuthenticatedUser | undefined;
 
     if (!user) {
-      throw new UnauthorizedException('You must be logged in to access this resource.');
+      throw new UnauthorizedException('Anda harus login untuk mengakses data ini.');
     }
 
     if (!requiredRoles.includes(user.role)) {
-      throw new ForbiddenException('You do not have permission to access this resource.');
+      throw new ForbiddenException('Anda tidak memiliki izin untuk mengakses data ini.');
     }
 
     return true;

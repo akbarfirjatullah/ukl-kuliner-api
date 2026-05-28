@@ -8,7 +8,7 @@ export class ListRecipesQueryDto {
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ example: 1, description: 'Filter by category ID' })
+  @ApiPropertyOptional({ example: 1, description: 'Filter berdasarkan ID kategori' })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

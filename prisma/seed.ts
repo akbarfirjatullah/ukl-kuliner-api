@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminName = process.env.ADMIN_NAME ?? 'UKL Admin';
+  const adminName = process.env.ADMIN_NAME ?? 'Admin UKL';
   const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@uklrecipe.com';
   const adminPassword = process.env.ADMIN_PASSWORD ?? 'Admin12345';
 
@@ -25,14 +25,14 @@ async function main() {
     }
   });
 
-  console.log('Seed completed successfully.');
-  console.log(`Admin email: ${adminEmail}`);
-  console.log(`Admin password: ${adminPassword}`);
+  console.log('Seed berhasil dijalankan.');
+  console.log(`Email admin: ${adminEmail}`);
+  console.log(`Password admin: ${adminPassword}`);
 }
 
 main()
   .catch((error) => {
-    console.error('Seed failed:', error);
+    console.error('Seed gagal:', error);
     process.exit(1);
   })
   .finally(async () => {

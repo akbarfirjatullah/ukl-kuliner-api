@@ -12,16 +12,16 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthService } from './auth.service';
 
-@ApiTags('Auth')
+@ApiTags('Autentikasi')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
   @Post('register')
-  @ApiOperation({ summary: 'Register a new user account' })
-  @ApiCreatedResponse({ description: 'User registered successfully.' })
-  @ApiConflictResponse({ description: 'Email is already registered.' })
+  @ApiOperation({ summary: 'Mendaftarkan akun pengguna baru' })
+  @ApiCreatedResponse({ description: 'Pengguna berhasil didaftarkan.' })
+  @ApiConflictResponse({ description: 'Email sudah terdaftar.' })
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
@@ -29,9 +29,9 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Login with email and password' })
-  @ApiOkResponse({ description: 'Login successful.' })
-  @ApiUnauthorizedResponse({ description: 'Invalid email or password.' })
+  @ApiOperation({ summary: 'Login menggunakan email dan password' })
+  @ApiOkResponse({ description: 'Login berhasil.' })
+  @ApiUnauthorizedResponse({ description: 'Email atau password salah.' })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }

@@ -29,7 +29,7 @@ import { ListRecipesQueryDto } from './dto/list-recipes-query.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { RecipesService } from './recipes.service';
 
-@ApiTags('Recipes')
+@ApiTags('Resep')
 @Controller('recipes')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
@@ -37,10 +37,10 @@ export class RecipesController {
   @Post()
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Create a new recipe (admin only)' })
-  @ApiCreatedResponse({ description: 'Recipe created successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Membuat resep baru (khusus admin)' })
+  @ApiCreatedResponse({ description: 'Resep berhasil dibuat.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   create(
     @CurrentUser('userId') userId: number,
     @Body() createRecipeDto: CreateRecipeDto
@@ -50,19 +50,19 @@ export class RecipesController {
 
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Get all recipes' })
-  @ApiQuery({ name: 'search', required: false, description: 'Search by title, description, or ingredients' })
-  @ApiQuery({ name: 'categoryId', required: false, type: Number, description: 'Filter by category ID' })
-  @ApiOkResponse({ description: 'Recipe list returned successfully.' })
+  @ApiOperation({ summary: 'Mengambil semua resep' })
+  @ApiQuery({ name: 'search', required: false, description: 'Cari berdasarkan judul, deskripsi, atau bahan' })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number, description: 'Filter berdasarkan ID kategori' })
+  @ApiOkResponse({ description: 'Daftar resep berhasil diambil.' })
   findAll(@Query() query: ListRecipesQueryDto) {
     return this.recipesService.findAll(query);
   }
 
   @Public()
   @Get(':id')
-  @ApiOperation({ summary: 'Get a recipe by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Recipe returned successfully.' })
+  @ApiOperation({ summary: 'Mengambil detail resep berdasarkan ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Detail resep berhasil diambil.' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.recipesService.findOne(id);
   }
@@ -70,11 +70,11 @@ export class RecipesController {
   @Patch(':id')
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Update a recipe (admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Recipe updated successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Mengubah resep (khusus admin)' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Resep berhasil diubah.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRecipeDto: UpdateRecipeDto
@@ -85,11 +85,11 @@ export class RecipesController {
   @Delete(':id')
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Delete a recipe (admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Recipe deleted successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Menghapus resep (khusus admin)' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Resep berhasil dihapus.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.recipesService.remove(id);
   }

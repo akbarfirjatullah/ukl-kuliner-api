@@ -45,7 +45,7 @@ export class CategoriesService {
     });
 
     if (!category) {
-      throw new NotFoundException('Category not found.');
+      throw new NotFoundException('Kategori tidak ditemukan.');
     }
 
     return category;
@@ -72,7 +72,7 @@ export class CategoriesService {
 
     if (category._count.recipes > 0) {
       throw new BadRequestException(
-        'Cannot delete a category that still has recipes. Move or delete the recipes first.'
+        'Kategori tidak dapat dihapus karena masih memiliki resep. Pindahkan atau hapus resep terlebih dahulu.'
       );
     }
 
@@ -81,7 +81,7 @@ export class CategoriesService {
     });
 
     return {
-      message: 'Category deleted successfully.'
+      message: 'Kategori berhasil dihapus.'
     };
   }
 }

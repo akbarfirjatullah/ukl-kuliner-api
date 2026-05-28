@@ -1,29 +1,30 @@
-# UKL Recipe API
+# API Resep Kuliner UKL
 
-Backend API for a culinary / recipe app built with NestJS, Prisma, and MySQL.
+Backend API untuk aplikasi kuliner / resep yang dibuat menggunakan NestJS, Prisma, dan MySQL.
 
-This project already includes:
+Project ini sudah mencakup:
 
-- JWT authentication with bcrypt password hashing
-- Role-based authorization (`ADMIN` and `USER`)
-- CRUD for recipes
-- CRUD for categories
-- Favorites feature (user can save / remove favorite recipes)
-- Rating and review feature
-- Automatic recipe average rating update
-- Swagger API documentation
-- Prisma schema, seed script, Docker MySQL setup, and deployment-ready Dockerfile
+- Autentikasi register dan login menggunakan JWT
+- Password di-hash menggunakan bcrypt
+- Role-based authorization untuk `ADMIN` dan `USER`
+- CRUD resep
+- CRUD kategori
+- Fitur favorit resep
+- Fitur rating dan ulasan
+- Update otomatis `averageRating` dan `ratingCount` pada tabel resep
+- Dokumentasi API menggunakan Swagger
+- Prisma schema, seed admin, Docker MySQL, dan Dockerfile untuk deployment
 
-## 1. Tech stack
+## Tech Stack
 
 - Framework: NestJS
-- Language: TypeScript
+- Bahasa: TypeScript
 - ORM: Prisma
 - Database: MySQL
-- Auth: JWT + Passport + bcrypt
-- API Docs: Swagger
+- Dokumentasi: Swagger
+- Auth: JWT, Passport, bcrypt
 
-## 2. Project structure
+## Struktur Project
 
 ```text
 src/
@@ -42,152 +43,140 @@ docker-compose.yml
 Dockerfile
 ```
 
-## 3. Step-by-step local setup
+## Cara Menjalankan Project
 
-### Step 1: Install dependencies
+Masuk ke folder project:
+
+```bash
+cd D:\UKLRPL
+```
+
+Install dependency:
 
 ```bash
 npm install
 ```
 
-### Step 2: Start MySQL with Docker
+Pastikan MySQL sudah berjalan. Kalau menggunakan XAMPP, nyalakan `MySQL` dari XAMPP Control Panel.
 
-```bash
-docker compose up -d
+Buat database bernama:
+
+```text
+ukl_recipe_app
 ```
 
-This creates a MySQL database with:
-
-- Database name: `ukl_recipe_app`
-- Username: `nestuser`
-- Password: `nestpass`
-- Port: `3306`
-
-### Step 3: Check the environment file
-
-The project already contains a local `.env` for development.
-
-If you need to recreate it manually, use this:
+Contoh `.env` untuk XAMPP MySQL tanpa password:
 
 ```env
 PORT=3000
-DATABASE_URL="mysql://nestuser:nestpass@localhost:3306/ukl_recipe_app"
+DATABASE_URL="mysql://root:@localhost:3306/ukl_recipe_app"
 JWT_SECRET="super-secret-jwt-key-change-this"
 JWT_EXPIRES_IN="1d"
-ADMIN_NAME="UKL Admin"
+ADMIN_NAME="Admin UKL"
 ADMIN_EMAIL="admin@uklrecipe.com"
 ADMIN_PASSWORD="Admin12345"
 ```
 
-### Step 4: Run Prisma migration
+Jalankan migration:
 
 ```bash
 npx prisma migrate dev --name init
 ```
 
-This will:
-
-- Create the tables in MySQL
-- Generate Prisma Client
-- Save the first migration files
-
-### Step 5: Seed the admin user
+Jalankan seed admin:
 
 ```bash
 npm run seed
 ```
 
-Default seeded admin:
-
-- Email: `admin@uklrecipe.com`
-- Password: `Admin12345`
-
-You can change those values in `.env`.
-
-### Step 6: Start the backend
+Jalankan server:
 
 ```bash
 npm run start:dev
 ```
 
-Base URL:
+URL API:
 
 ```text
 http://localhost:3000/api
 ```
 
-Swagger docs:
+Dokumentasi Swagger:
 
 ```text
 http://localhost:3000/api/docs
 ```
 
-## 4. Authentication and roles
+## Akun Admin Awal
 
-### Roles
-
-- `ADMIN`
-  - Can create, update, and delete recipes
-  - Can create, update, and delete categories
-- `USER`
-  - Can register and login
-  - Can read recipes and categories
-  - Can manage their own favorites
-  - Can manage their own reviews
-
-### Auth flow
-
-1. Register a regular user at `POST /api/auth/register`
-2. Login at `POST /api/auth/login`
-3. Copy the returned `accessToken`
-4. In Swagger, click `Authorize`
-5. Paste:
+Setelah menjalankan seed, akun admin default adalah:
 
 ```text
-Bearer YOUR_TOKEN_HERE
+Email: admin@uklrecipe.com
+Password: Admin12345
 ```
 
-## 5. Main API endpoints
+## Cara Menggunakan Token
 
-### Auth
+1. Login melalui `POST /api/auth/login`
+2. Salin `accessToken` dari response
+3. Klik tombol `Authorize` di Swagger
+4. Masukkan token dengan format:
+
+```text
+Bearer TOKEN_ANDA
+```
+
+## Role Pengguna
+
+`ADMIN` dapat:
+
+- Membuat, mengubah, dan menghapus kategori
+- Membuat, mengubah, dan menghapus resep
+- Melihat daftar pengguna
+
+`USER` dapat:
+
+- Melihat kategori dan resep
+- Mengelola favorit miliknya sendiri
+- Membuat, mengubah, dan menghapus ulasan miliknya sendiri
+
+## Endpoint Utama
+
+Auth:
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 
-### Users
+Users:
 
 - `GET /api/users/me`
-- `GET /api/users` - admin only
-- `GET /api/users/:id` - admin only
+- `GET /api/users` - khusus admin
+- `GET /api/users/:id` - khusus admin
 
-### Categories
+Categories:
 
-- `POST /api/categories` - admin only
+- `POST /api/categories` - khusus admin
 - `GET /api/categories`
 - `GET /api/categories/:id`
-- `PATCH /api/categories/:id` - admin only
-- `DELETE /api/categories/:id` - admin only
+- `PATCH /api/categories/:id` - khusus admin
+- `DELETE /api/categories/:id` - khusus admin
 
-### Recipes
+Recipes:
 
-- `POST /api/recipes` - admin only
+- `POST /api/recipes` - khusus admin
 - `GET /api/recipes`
 - `GET /api/recipes/:id`
-- `PATCH /api/recipes/:id` - admin only
-- `DELETE /api/recipes/:id` - admin only
+- `PATCH /api/recipes/:id` - khusus admin
+- `DELETE /api/recipes/:id` - khusus admin
 
-Optional query for recipe list:
-
-- `search`
-- `categoryId`
-
-### Favorites
+Favorites:
 
 - `GET /api/favorites`
 - `POST /api/favorites/:recipeId`
 - `DELETE /api/favorites/:recipeId`
 
-### Reviews
+Reviews:
 
 - `GET /api/reviews/me`
 - `GET /api/reviews/recipe/:recipeId`
@@ -195,206 +184,98 @@ Optional query for recipe list:
 - `PATCH /api/reviews/recipe/:recipeId`
 - `DELETE /api/reviews/recipe/:recipeId`
 
-## 6. Transaction logic explained
+## Logic Transaksi
 
-### Favorites
+Favorit:
 
-When a user adds a recipe to favorites:
+- API mengecek apakah resep ada
+- API mengecek apakah resep sudah ada di favorit user
+- Data favorit disimpan atau dihapus di dalam Prisma transaction
 
-1. The API checks whether the recipe exists
-2. The API checks whether the user already saved it
-3. The favorite is inserted inside a Prisma transaction
+Ulasan:
 
-When a user removes a favorite:
+- Satu user hanya boleh memberi satu ulasan untuk satu resep
+- Saat ulasan dibuat, diubah, atau dihapus, API menghitung ulang rating resep
+- Field `averageRating` dan `ratingCount` pada resep akan diperbarui otomatis
+- Proses ini berjalan dalam Prisma transaction agar data tetap konsisten
 
-1. The API checks whether that favorite exists for the user
-2. The favorite is deleted inside a Prisma transaction
+## Docker
 
-### Reviews and average rating
+Docker bersifat opsional untuk development lokal.
 
-Each user can only review one recipe once.
+Kalau menggunakan XAMPP, Anda tidak wajib memakai Docker. Docker disediakan agar MySQL bisa dijalankan secara terpisah dan konsisten untuk project ini.
 
-When a review is created, updated, or deleted:
-
-1. The API runs the review change inside a transaction
-2. It recalculates the recipe rating summary using Prisma aggregate
-3. It updates:
-   - `averageRating`
-   - `ratingCount`
-
-This ensures the value stored in the `Recipe` table is always synced with real reviews.
-
-## 7. Prisma data model
-
-Main entities:
-
-- `User`
-- `Category`
-- `Recipe`
-- `Favorite`
-- `Review`
-
-Relations:
-
-- One `Category` has many `Recipe`
-- One `User` can create many `Recipe`
-- One `User` can favorite many `Recipe` through `Favorite`
-- One `User` can review many `Recipe` through `Review`
-- One `Recipe` can have many favorites and reviews
-
-Important unique rules:
-
-- User email must be unique
-- Category name must be unique
-- Recipe slug must be unique
-- Favorite has unique pair: `(userId, recipeId)`
-- Review has unique pair: `(userId, recipeId)`
-
-## 8. Useful commands
-
-### Start development server
+Menjalankan MySQL dengan Docker:
 
 ```bash
-npm run start:dev
+docker compose up -d
 ```
 
-### Build project
-
-```bash
-npm run build
-```
-
-### Open Prisma Studio
-
-```bash
-npm run prisma:studio
-```
-
-### Stop database container
+Menghentikan Docker:
 
 ```bash
 docker compose down
 ```
 
-## 9. Deployment guide
+## Deployment
 
-Recommendation:
+Project ini bisa dideploy ke Railway atau Render.
 
-- Use Railway if you want the easiest setup for a school project
-- Use Render if you want a public backend plus a separate private MySQL service
-
-### Option A: Deploy to Railway
-
-Official docs used:
-
-- [Railway NestJS deployment guide](https://docs.railway.com/guides/nest)
-- [Railway MySQL docs](https://docs.railway.com/databases/mysql)
-
-Steps:
-
-1. Push this project to GitHub.
-2. In Railway, create a new project.
-3. Add a MySQL service to the project.
-4. Add your GitHub repo as the application service.
-5. Set environment variables for the app service:
+Environment variable yang perlu disiapkan di server:
 
 ```env
 PORT=3000
-JWT_SECRET=your-production-secret
-JWT_EXPIRES_IN=1d
-DATABASE_URL=<use the MySQL service connection URL>
-ADMIN_NAME=UKL Admin
-ADMIN_EMAIL=admin@yourapp.com
-ADMIN_PASSWORD=StrongPassword123
+DATABASE_URL="mysql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME"
+JWT_SECRET="ganti-dengan-secret-production"
+JWT_EXPIRES_IN="1d"
+ADMIN_NAME="Admin UKL"
+ADMIN_EMAIL="admin@uklrecipe.com"
+ADMIN_PASSWORD="Admin12345"
 ```
 
-6. Because this project includes a `Dockerfile`, Railway can deploy it as a Docker-based app.
-7. After deploy finishes, open the service settings and generate a public domain.
-8. Your Swagger docs will be available at:
+Build command:
+
+```bash
+npm install
+npm run build
+```
+
+Start command:
+
+```bash
+npm run start:prod
+```
+
+Jika menggunakan Dockerfile, migration akan dijalankan otomatis sebelum server start:
+
+```bash
+npx prisma migrate deploy
+```
+
+## Catatan Untuk Frontend
+
+Base URL lokal:
 
 ```text
-https://your-domain.up.railway.app/api/docs
+http://localhost:3000/api
 ```
 
-Notes:
-
-- Railway docs show that MySQL service variables include `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`, and `MYSQL_URL`
-- You can use the MySQL URL from that service directly for `DATABASE_URL`
-
-### Option B: Deploy to Render
-
-Official docs used:
-
-- [Render Web Services docs](https://render.com/docs/web-services/)
-- [Render Docker docs](https://render.com/docs/docker)
-- [Render MySQL deployment docs](https://render.com/docs/deploy-mysql)
-- [Render environment variable docs](https://render.com/docs/environment-variables)
-
-Steps:
-
-1. Push this project to GitHub.
-2. In Render, create a new private service for MySQL.
-3. Use the MySQL Docker setup described in Render docs.
-4. Make sure the MySQL private service uses a persistent disk mounted at:
+Frontend harus mengirim token login pada endpoint yang membutuhkan autentikasi:
 
 ```text
-/var/lib/mysql
+Authorization: Bearer TOKEN_ANDA
 ```
 
-5. Create a new Web Service for this NestJS repo.
-6. Render can build from the included `Dockerfile`.
-7. Add environment variables to the web service:
+Endpoint publik seperti `GET /api/recipes` dan `GET /api/categories` tidak membutuhkan token.
 
-```env
-PORT=10000
-JWT_SECRET=your-production-secret
-JWT_EXPIRES_IN=1d
-DATABASE_URL=mysql://USERNAME:PASSWORD@MYSQL_INTERNAL_HOST:3306/DATABASE_NAME
-ADMIN_NAME=UKL Admin
-ADMIN_EMAIL=admin@yourapp.com
-ADMIN_PASSWORD=StrongPassword123
+Endpoint admin membutuhkan akun dengan role `ADMIN`.
+
+## Perintah Penting
+
+```bash
+npm run start:dev
+npm run build
+npm run seed
+npx prisma migrate dev --name init
+npx prisma studio
 ```
-
-8. Deploy the web service.
-9. Render gives your app a public URL like:
-
-```text
-https://your-service.onrender.com
-```
-
-10. Swagger docs will be:
-
-```text
-https://your-service.onrender.com/api/docs
-```
-
-Important:
-
-- Render docs say web services must bind to `0.0.0.0` and use the provided port
-- Nest already does that correctly when you set the `PORT` environment variable
-
-## 10. What to do after this
-
-After your backend is running, your next normal steps would be:
-
-1. Test all endpoints in Swagger
-2. Create a few categories as admin
-3. Create a few recipes as admin
-4. Register a normal user
-5. Test favorites
-6. Test reviews and confirm `averageRating` changes
-7. Deploy to Railway or Render
-
-## 11. Verified in this workspace
-
-The following checks were completed successfully in this workspace:
-
-- `npm install`
-- `npm run build`
-- `npx prisma validate`
-
-## 12. Important note
-
-This repository is backend only.
-
-You do not need to build the frontend for your UKL assessment if your task is only the backend API. The frontend can later consume this API using the documented endpoints.

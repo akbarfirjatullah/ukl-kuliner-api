@@ -25,7 +25,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
-@ApiTags('Categories')
+@ApiTags('Kategori')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -33,27 +33,27 @@ export class CategoriesController {
   @Post()
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Create a new category (admin only)' })
-  @ApiCreatedResponse({ description: 'Category created successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Membuat kategori baru (khusus admin)' })
+  @ApiCreatedResponse({ description: 'Kategori berhasil dibuat.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Get all categories' })
-  @ApiOkResponse({ description: 'Category list returned successfully.' })
+  @ApiOperation({ summary: 'Mengambil semua kategori' })
+  @ApiOkResponse({ description: 'Daftar kategori berhasil diambil.' })
   findAll() {
     return this.categoriesService.findAll();
   }
 
   @Public()
   @Get(':id')
-  @ApiOperation({ summary: 'Get a category by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'Category ID' })
-  @ApiOkResponse({ description: 'Category returned successfully.' })
+  @ApiOperation({ summary: 'Mengambil detail kategori berdasarkan ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID kategori' })
+  @ApiOkResponse({ description: 'Detail kategori berhasil diambil.' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
   }
@@ -61,11 +61,11 @@ export class CategoriesController {
   @Patch(':id')
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Update a category (admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'Category ID' })
-  @ApiOkResponse({ description: 'Category updated successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Mengubah kategori (khusus admin)' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID kategori' })
+  @ApiOkResponse({ description: 'Kategori berhasil diubah.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto
@@ -76,11 +76,11 @@ export class CategoriesController {
   @Delete(':id')
   @ApiBearerAuth()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Delete a category (admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'Category ID' })
-  @ApiOkResponse({ description: 'Category deleted successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Menghapus kategori (khusus admin)' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID kategori' })
+  @ApiOkResponse({ description: 'Kategori berhasil dihapus.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.remove(id);
   }

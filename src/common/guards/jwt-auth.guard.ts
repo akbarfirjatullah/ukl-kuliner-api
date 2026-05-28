@@ -28,7 +28,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest<TUser>(error: unknown, user: TUser) {
     if (error || !user) {
-      throw error || new UnauthorizedException('Authentication token is missing or invalid.');
+      throw error || new UnauthorizedException('Token autentikasi tidak ada atau tidak valid.');
     }
 
     return user;

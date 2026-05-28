@@ -41,7 +41,7 @@ export class FavoritesService {
       });
 
       if (!recipe) {
-        throw new NotFoundException('Recipe not found.');
+        throw new NotFoundException('Resep tidak ditemukan.');
       }
 
       const existingFavorite = await tx.favorite.findUnique({
@@ -54,7 +54,7 @@ export class FavoritesService {
       });
 
       if (existingFavorite) {
-        throw new ConflictException('Recipe is already in your favorites.');
+        throw new ConflictException('Resep sudah ada di daftar favorit Anda.');
       }
 
       return tx.favorite.create({
@@ -79,7 +79,7 @@ export class FavoritesService {
       });
 
       if (!favorite) {
-        throw new NotFoundException('Favorite recipe not found in your list.');
+        throw new NotFoundException('Resep favorit tidak ditemukan di daftar Anda.');
       }
 
       await tx.favorite.delete({
@@ -92,7 +92,7 @@ export class FavoritesService {
       });
 
       return {
-        message: 'Recipe removed from favorites successfully.'
+        message: 'Resep berhasil dihapus dari favorit.'
       };
     });
   }

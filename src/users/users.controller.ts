@@ -13,37 +13,37 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UsersService } from './users.service';
 
-@ApiTags('Users')
+@ApiTags('Pengguna')
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  @ApiOperation({ summary: 'Get the currently logged-in user profile' })
-  @ApiOkResponse({ description: 'Current user profile returned successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Mengambil profil pengguna yang sedang login' })
+  @ApiOkResponse({ description: 'Profil pengguna berhasil diambil.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   findMe(@CurrentUser('userId') userId: number) {
     return this.usersService.findMe(userId);
   }
 
   @Get()
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Get all users (admin only)' })
-  @ApiOkResponse({ description: 'User list returned successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Mengambil semua pengguna (khusus admin)' })
+  @ApiOkResponse({ description: 'Daftar pengguna berhasil diambil.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Get a single user by ID (admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'User ID' })
-  @ApiOkResponse({ description: 'User returned successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
-  @ApiForbiddenResponse({ description: 'Only admins can access this endpoint.' })
+  @ApiOperation({ summary: 'Mengambil detail pengguna berdasarkan ID (khusus admin)' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID pengguna' })
+  @ApiOkResponse({ description: 'Detail pengguna berhasil diambil.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
+  @ApiForbiddenResponse({ description: 'Endpoint ini hanya dapat diakses oleh admin.' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOneById(id);
   }

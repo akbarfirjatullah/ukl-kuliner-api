@@ -12,26 +12,26 @@ import {
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { FavoritesService } from './favorites.service';
 
-@ApiTags('Favorites')
+@ApiTags('Favorit')
 @ApiBearerAuth()
 @Controller('favorites')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get the logged-in user favorite recipes' })
-  @ApiOkResponse({ description: 'Favorite recipes returned successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Mengambil daftar resep favorit pengguna yang sedang login' })
+  @ApiOkResponse({ description: 'Daftar resep favorit berhasil diambil.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   findMyFavorites(@CurrentUser('userId') userId: number) {
     return this.favoritesService.findMyFavorites(userId);
   }
 
   @Post(':recipeId')
-  @ApiOperation({ summary: 'Add a recipe to the logged-in user favorites' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiCreatedResponse({ description: 'Recipe added to favorites successfully.' })
-  @ApiConflictResponse({ description: 'Recipe is already in favorites.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Menambahkan resep ke favorit pengguna yang sedang login' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiCreatedResponse({ description: 'Resep berhasil ditambahkan ke favorit.' })
+  @ApiConflictResponse({ description: 'Resep sudah ada di favorit.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   addToFavorites(
     @CurrentUser('userId') userId: number,
     @Param('recipeId', ParseIntPipe) recipeId: number
@@ -40,10 +40,10 @@ export class FavoritesController {
   }
 
   @Delete(':recipeId')
-  @ApiOperation({ summary: 'Remove a recipe from the logged-in user favorites' })
-  @ApiParam({ name: 'recipeId', type: Number, description: 'Recipe ID' })
-  @ApiOkResponse({ description: 'Recipe removed from favorites successfully.' })
-  @ApiUnauthorizedResponse({ description: 'Authentication is required.' })
+  @ApiOperation({ summary: 'Menghapus resep dari favorit pengguna yang sedang login' })
+  @ApiParam({ name: 'recipeId', type: Number, description: 'ID resep' })
+  @ApiOkResponse({ description: 'Resep berhasil dihapus dari favorit.' })
+  @ApiUnauthorizedResponse({ description: 'Autentikasi diperlukan.' })
   removeFromFavorites(
     @CurrentUser('userId') userId: number,
     @Param('recipeId', ParseIntPipe) recipeId: number

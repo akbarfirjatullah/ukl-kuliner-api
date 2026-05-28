@@ -18,7 +18,7 @@ export class CreateRecipeDto {
   title: string;
 
   @ApiProperty({
-    example: 'Traditional Indonesian fried rice with egg, chicken, and vegetables.'
+    example: 'Nasi goreng tradisional Indonesia dengan telur, ayam, dan sayuran.'
   })
   @IsString()
   @IsNotEmpty()
@@ -26,7 +26,7 @@ export class CreateRecipeDto {
 
   @ApiProperty({
     example:
-      '- 2 plates rice\n- 2 eggs\n- 100g chicken\n- 2 cloves garlic\n- 1 tbsp sweet soy sauce'
+      '- 2 piring nasi\n- 2 butir telur\n- 100 gram ayam\n- 2 siung bawang putih\n- 1 sdm kecap manis'
   })
   @IsString()
   @IsNotEmpty()
@@ -34,7 +34,7 @@ export class CreateRecipeDto {
 
   @ApiProperty({
     example:
-      '1. Heat oil in a pan.\n2. Saute garlic.\n3. Add chicken and eggs.\n4. Add rice and sauces.\n5. Serve hot.'
+      '1. Panaskan minyak.\n2. Tumis bawang putih.\n3. Masukkan ayam dan telur.\n4. Tambahkan nasi dan bumbu.\n5. Sajikan selagi hangat.'
   })
   @IsString()
   @IsNotEmpty()
@@ -66,7 +66,7 @@ export class CreateRecipeDto {
   @Min(1)
   servings?: number;
 
-  @ApiProperty({ example: 1, description: 'Category ID' })
+  @ApiProperty({ example: 1, description: 'ID kategori' })
   @Type(() => Number)
   @IsInt()
   @Min(1)
