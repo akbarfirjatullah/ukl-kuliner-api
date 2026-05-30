@@ -70,7 +70,7 @@ Contoh `.env` untuk XAMPP MySQL tanpa password:
 ```env
 PORT=3000
 DATABASE_URL="mysql://root:@localhost:3306/ukl_recipe_app"
-JWT_SECRET="change-me-to-a-strong-random-secret-at-least-32-characters"
+JWT_SECRET="ukl-recipe-local-development-secret-2026"
 JWT_EXPIRES_IN="1d"
 ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
 ADMIN_NAME="Admin UKL"
@@ -110,7 +110,7 @@ http://localhost:3000/api/docs
 
 ## Akun Admin Awal
 
-Setelah menjalankan seed, akun admin default adalah:
+Setelah menjalankan seed, atau setelah backend Docker deploy pertama kali, akun admin default adalah:
 
 ```text
 Email: admin@uklrecipe.com
@@ -209,10 +209,10 @@ Kalau menggunakan XAMPP, Anda tidak wajib memakai Docker. Docker disediakan agar
 Kalau menjalankan MySQL dengan Docker Compose, siapkan variabel berikut di `.env` sebelum menjalankan perintah di bawah:
 
 ```env
-MYSQL_ROOT_PASSWORD="ganti-password-root-docker"
+MYSQL_ROOT_PASSWORD="ukl-root-local-2026"
 MYSQL_DATABASE="ukl_recipe_app"
 MYSQL_USER="nestuser"
-MYSQL_PASSWORD="ganti-password-database-docker"
+MYSQL_PASSWORD="ukl-db-local-2026"
 ```
 
 `DATABASE_URL` di aplikasi harus sesuai dengan `MYSQL_USER` dan `MYSQL_PASSWORD` di atas jika Anda memakai Docker.
@@ -238,7 +238,7 @@ Environment variable yang perlu disiapkan di server:
 ```env
 PORT=3000
 DATABASE_URL="mysql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME"
-JWT_SECRET="ganti-dengan-secret-production-yang-kuat-minimal-32-karakter"
+JWT_SECRET="ukl-recipe-production-secret-2026-change-me"
 JWT_EXPIRES_IN="1d"
 ALLOWED_ORIGINS="https://frontend-anda.com"
 ADMIN_NAME="Admin UKL"
@@ -259,10 +259,11 @@ Start command:
 npm run start:prod
 ```
 
-Jika menggunakan Dockerfile, migration akan dijalankan otomatis sebelum server start:
+Jika menggunakan Dockerfile, migration dan seed admin akan dijalankan otomatis sebelum server start:
 
 ```bash
 npx prisma migrate deploy
+npm run seed
 ```
 
 ## Catatan Untuk Frontend
