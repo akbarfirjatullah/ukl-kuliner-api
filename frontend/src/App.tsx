@@ -332,7 +332,7 @@ function App() {
           <span className="brand-mark">
             <ChefHat size={25} />
           </span>
-          <div>
+          <div className="brand-copy">
             <strong>UKL Kuliner</strong>
             <small>Recipe workspace</small>
           </div>
@@ -406,7 +406,6 @@ function App() {
       <main className="main-content">
         <header className="topbar">
           <div>
-            <p className="eyebrow">Backend: {api.baseUrl}</p>
             <h1>Kelola dan uji resep dari API backend.</h1>
           </div>
           <button className="ghost-button" onClick={() => void loadInitialData()}>

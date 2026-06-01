@@ -109,6 +109,11 @@ label {
   gap: 12px;
 }
 
+.brand-copy {
+  display: grid;
+  gap: 2px;
+}
+
 .brand strong,
 h1,
 h2,
