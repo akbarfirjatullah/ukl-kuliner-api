@@ -5,6 +5,19 @@ import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { ListRecipesQueryDto } from './dto/list-recipes-query.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
+type RecipePayload = {
+  title?: string;
+  description?: string;
+  ingredients?: string;
+  instructions?: string;
+  imageUrl?: string;
+  prepTimeMinutes?: number;
+  cookTimeMinutes?: number;
+  cookingTime?: number;
+  difficulty?: string;
+  servings?: number;
+};
+
 @Injectable()
 export class RecipesService {
   private readonly recipeInclude = {
@@ -30,15 +43,17 @@ export class RecipesService {
   async create(createdById: number, createRecipeDto: CreateRecipeDto) {
     await this.ensureCategoryExists(createRecipeDto.categoryId);
     const slug = await this.generateUniqueSlug(createRecipeDto.title);
+    const recipeData = this.buildCreateRecipeData(createRecipeDto);
 
     return this.prisma.recipe.create({
       data: {
-        ...createRecipeDto,
+        ...recipeData,
         slug,
-        createdById
+        createdById,
+        categoryId: createRecipeDto.categoryId
       },
       include: this.recipeInclude
-    });
+    }).then((recipe) => this.withCookingTime(recipe));
   }
 
   async findAll(query: ListRecipesQueryDto) {
@@ -56,13 +71,15 @@ export class RecipesService {
       where.categoryId = query.categoryId;
     }
 
-    return this.prisma.recipe.findMany({
+    const recipes = await this.prisma.recipe.findMany({
       where,
       include: this.recipeInclude,
       orderBy: {
         createdAt: 'desc'
       }
     });
+
+    return recipes.map((recipe) => this.withCookingTime(recipe));
   }
 
   async findOne(id: number) {
@@ -75,7 +92,7 @@ export class RecipesService {
       throw new NotFoundException('Resep tidak ditemukan.');
     }
 
-    return recipe;
+    return this.withCookingTime(recipe);
   }
 
   async update(id: number, updateRecipeDto: UpdateRecipeDto) {
@@ -85,15 +102,17 @@ export class RecipesService {
       await this.ensureCategoryExists(updateRecipeDto.categoryId);
     }
 
+    const recipeData = this.buildUpdateRecipeData(updateRecipeDto);
     const data: Prisma.RecipeUpdateInput = {
-      title: updateRecipeDto.title,
-      description: updateRecipeDto.description,
-      ingredients: updateRecipeDto.ingredients,
-      instructions: updateRecipeDto.instructions,
-      imageUrl: updateRecipeDto.imageUrl,
-      prepTimeMinutes: updateRecipeDto.prepTimeMinutes,
-      cookTimeMinutes: updateRecipeDto.cookTimeMinutes,
-      servings: updateRecipeDto.servings
+      title: recipeData.title,
+      description: recipeData.description,
+      ingredients: recipeData.ingredients,
+      instructions: recipeData.instructions,
+      imageUrl: recipeData.imageUrl,
+      prepTimeMinutes: recipeData.prepTimeMinutes,
+      cookTimeMinutes: recipeData.cookTimeMinutes,
+      difficulty: recipeData.difficulty,
+      servings: recipeData.servings
     };
 
     if (updateRecipeDto.title) {
@@ -112,7 +131,7 @@ export class RecipesService {
       where: { id },
       data,
       include: this.recipeInclude
-    });
+    }).then((recipe) => this.withCookingTime(recipe));
   }
 
   async remove(id: number) {
@@ -172,5 +191,44 @@ export class RecipesService {
       .replace(/-+/g, '-');
 
     return slug || 'recipe';
+  }
+
+  private buildCreateRecipeData(recipeDto: RecipePayload) {
+    const cookTimeMinutes = recipeDto.cookTimeMinutes ?? recipeDto.cookingTime;
+
+    return {
+      title: recipeDto.title as string,
+      description: recipeDto.description as string,
+      ingredients: recipeDto.ingredients as string,
+      instructions: recipeDto.instructions as string,
+      imageUrl: recipeDto.imageUrl,
+      prepTimeMinutes: recipeDto.prepTimeMinutes,
+      cookTimeMinutes,
+      difficulty: recipeDto.difficulty,
+      servings: recipeDto.servings
+    };
+  }
+
+  private buildUpdateRecipeData(recipeDto: RecipePayload) {
+    const cookTimeMinutes = recipeDto.cookTimeMinutes ?? recipeDto.cookingTime;
+
+    return {
+      title: recipeDto.title,
+      description: recipeDto.description,
+      ingredients: recipeDto.ingredients,
+      instructions: recipeDto.instructions,
+      imageUrl: recipeDto.imageUrl,
+      prepTimeMinutes: recipeDto.prepTimeMinutes,
+      cookTimeMinutes,
+      difficulty: recipeDto.difficulty,
+      servings: recipeDto.servings
+    };
+  }
+
+  private withCookingTime<T extends { cookTimeMinutes: number | null }>(recipe: T) {
+    return {
+      ...recipe,
+      cookingTime: recipe.cookTimeMinutes
+    };
   }
 }

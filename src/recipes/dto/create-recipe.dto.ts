@@ -59,6 +59,22 @@ export class CreateRecipeDto {
   @Min(1)
   cookTimeMinutes?: number;
 
+  @ApiPropertyOptional({
+    example: 10,
+    description: 'Alias untuk cookTimeMinutes yang dipakai frontend baru.'
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  cookingTime?: number;
+
+  @ApiPropertyOptional({ example: 'Mudah' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  difficulty?: string;
+
   @ApiPropertyOptional({ example: 2 })
   @IsOptional()
   @Type(() => Number)

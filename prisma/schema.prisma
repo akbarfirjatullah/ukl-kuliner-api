@@ -46,6 +46,7 @@ model Recipe {
   imageUrl        String?
   prepTimeMinutes Int?
   cookTimeMinutes Int?
+  difficulty      String?   @db.VarChar(50)
   servings        Int?
   averageRating   Float     @default(0)
   ratingCount     Int       @default(0)
