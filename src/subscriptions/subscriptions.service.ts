@@ -51,32 +51,18 @@ export class SubscriptionsService {
   }
 
   async findMySubscription(userId: number) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: this.userSelect
-    });
+    return this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({
+        where: { id: userId },
+        select: this.userSelect
+      });
 
-    if (!user) {
-      throw new NotFoundException('Pengguna tidak ditemukan.');
-    }
+      if (!user) {
+        throw new NotFoundException('Pengguna tidak ditemukan.');
+      }
 
-    const [activeSubscription, latestSubscription] = await Promise.all([
-      this.prisma.subscription.findFirst({
-        where: {
-          userId,
-          status: SubscriptionStatus.ACTIVE,
-          expiresAt: {
-            gt: new Date()
-          }
-        },
-        include: {
-          paymentTransaction: true
-        },
-        orderBy: {
-          expiresAt: 'desc'
-        }
-      }),
-      this.prisma.subscription.findFirst({
+      const activeSubscription = await this.syncUserSubscriptionState(tx, userId);
+      const latestSubscription = await tx.subscription.findFirst({
         where: { userId },
         include: {
           paymentTransaction: true
@@ -84,14 +70,18 @@ export class SubscriptionsService {
         orderBy: {
           createdAt: 'desc'
         }
-      })
-    ]);
+      });
+      const refreshedUser = await tx.user.findUnique({
+        where: { id: userId },
+        select: this.userSelect
+      });
 
-    return {
-      user,
-      activeSubscription,
-      latestSubscription
-    };
+      return {
+        user: refreshedUser ?? user,
+        activeSubscription,
+        latestSubscription
+      };
+    });
   }
 
   async findMyPayments(userId: number) {
@@ -219,6 +209,32 @@ export class SubscriptionsService {
         throw new NotFoundException('Transaksi pembayaran tidak ditemukan.');
       }
 
+      if (payment.status === paymentNotificationDto.status) {
+        await this.syncUserSubscriptionState(tx, payment.userId);
+
+        const refreshedPayment = await tx.paymentTransaction.findUnique({
+          where: {
+            id: payment.id
+          },
+          include: this.paymentInclude
+        });
+
+        const refreshedSubscription = await tx.subscription.findUnique({
+          where: {
+            id: payment.subscriptionId
+          },
+          include: {
+            paymentTransaction: true
+          }
+        });
+
+        return {
+          message: this.getPaymentStatusMessage(paymentNotificationDto.status),
+          payment: refreshedPayment,
+          subscription: refreshedSubscription
+        };
+      }
+
       const nextSubscriptionStatus = this.mapPaymentStatusToSubscriptionStatus(
         paymentNotificationDto.status
       );
@@ -306,12 +322,27 @@ export class SubscriptionsService {
     tx: Prisma.TransactionClient,
     userId: number
   ) {
+    const now = new Date();
+
+    await tx.subscription.updateMany({
+      where: {
+        userId,
+        status: SubscriptionStatus.ACTIVE,
+        expiresAt: {
+          lte: now
+        }
+      },
+      data: {
+        status: SubscriptionStatus.EXPIRED
+      }
+    });
+
     const activeSubscription = await tx.subscription.findFirst({
       where: {
         userId,
         status: SubscriptionStatus.ACTIVE,
         expiresAt: {
-          gt: new Date()
+          gt: now
         }
       },
       orderBy: {
@@ -328,6 +359,8 @@ export class SubscriptionsService {
         subscriptionExpiry: activeSubscription?.expiresAt ?? null
       }
     });
+
+    return activeSubscription;
   }
 
   private buildOrderId(userId: number, plan: SubscriptionPlan) {

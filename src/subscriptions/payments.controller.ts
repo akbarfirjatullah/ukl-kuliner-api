@@ -18,11 +18,18 @@ export class PaymentsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
   @Public()
-  @Post()
   @Post('notification')
   @ApiOperation({ summary: 'Menyimulasikan notifikasi pembayaran (Midtrans-like webhook)' })
   @ApiCreatedResponse({ description: 'Status pembayaran berhasil diproses.' })
   handlePaymentNotification(@Body() paymentNotificationDto: PaymentNotificationDto) {
+    return this.subscriptionsService.handlePaymentNotification(paymentNotificationDto);
+  }
+
+  @Public()
+  @Post()
+  @ApiOperation({ summary: 'Menyimulasikan notifikasi pembayaran (alias)' })
+  @ApiCreatedResponse({ description: 'Status pembayaran berhasil diproses.' })
+  handlePaymentNotificationLegacy(@Body() paymentNotificationDto: PaymentNotificationDto) {
     return this.subscriptionsService.handlePaymentNotification(paymentNotificationDto);
   }
 
