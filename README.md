@@ -72,7 +72,7 @@ PORT=3000
 DATABASE_URL="mysql://root:@localhost:3306/ukl_recipe_app"
 JWT_SECRET="ukl-recipe-local-development-secret-2026"
 JWT_EXPIRES_IN="1d"
-ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
+ALLOWED_ORIGINS="http://localhost:3001,http://127.0.0.1:3001"
 ADMIN_NAME="Admin UKL"
 ADMIN_EMAIL="admin@uklrecipe.com"
 ADMIN_PASSWORD="Admin12345"
@@ -240,7 +240,7 @@ PORT=3000
 DATABASE_URL="mysql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME"
 JWT_SECRET="ukl-recipe-production-secret-2026-change-me"
 JWT_EXPIRES_IN="1d"
-ALLOWED_ORIGINS="https://frontend-anda.com"
+ALLOWED_ORIGINS="https://resep-app-anda.com"
 ADMIN_NAME="Admin UKL"
 ADMIN_EMAIL="admin@uklrecipe.com"
 ADMIN_PASSWORD="Admin12345"
@@ -266,7 +266,7 @@ npx prisma migrate deploy
 npm run seed
 ```
 
-## Catatan Untuk Frontend
+## Catatan Untuk Frontend `resep-app`
 
 Base URL lokal:
 
@@ -274,7 +274,7 @@ Base URL lokal:
 http://localhost:3000/api
 ```
 
-Frontend harus mengirim token login pada endpoint yang membutuhkan autentikasi:
+Aplikasi frontend `resep-app` harus mengirim token login pada endpoint yang membutuhkan autentikasi:
 
 ```text
 Authorization: Bearer TOKEN_ANDA

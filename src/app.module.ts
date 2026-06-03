@@ -9,6 +9,7 @@ import { RolesGuard } from './common/guards/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { UsersModule } from './users/users.module';
 
 const REQUIRED_ENV_KEYS = ['DATABASE_URL', 'JWT_SECRET', 'PORT'] as const;
@@ -42,7 +43,8 @@ function validateEnv(config: Record<string, unknown>) {
     CategoriesModule,
     RecipesModule,
     FavoritesModule,
-    ReviewsModule
+    ReviewsModule,
+    SubscriptionsModule
   ],
   providers: [
     {

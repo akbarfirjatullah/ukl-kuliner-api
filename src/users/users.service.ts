@@ -8,6 +8,8 @@ export class UsersService {
     name: true,
     email: true,
     role: true,
+    subscriptionPlan: true,
+    subscriptionExpiry: true,
     createdAt: true,
     updatedAt: true
   } as const;

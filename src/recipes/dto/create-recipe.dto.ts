@@ -61,7 +61,7 @@ export class CreateRecipeDto {
 
   @ApiPropertyOptional({
     example: 10,
-    description: 'Alias untuk cookTimeMinutes yang dipakai frontend baru.'
+    description: 'Alias untuk cookTimeMinutes yang dipakai resep-app.'
   })
   @IsOptional()
   @Type(() => Number)

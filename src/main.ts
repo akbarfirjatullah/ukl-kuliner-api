@@ -7,7 +7,7 @@ import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exce
 
 function parseAllowedOrigins(configService: ConfigService) {
   const configuredOrigins = configService.get<string>('ALLOWED_ORIGINS');
-  const fallbackOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+  const fallbackOrigins = ['http://localhost:3001', 'http://127.0.0.1:3001'];
 
   const origins =
     configuredOrigins
